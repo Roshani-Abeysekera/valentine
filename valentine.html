@@ -26,7 +26,8 @@
       width: 90%;
       text-align: center;
       position: relative;
-      z-index: 1; /* above hearts */
+      z-index: 1;
+      transition: transform 0.3s;
     }
 
     .buttons {
@@ -62,7 +63,7 @@
       margin-top: 20px;
     }
 
-    /* Red hearts */
+    /* Hearts falling */
     .heart {
       position: absolute;
       width: 20px;
@@ -72,7 +73,7 @@
       animation-name: fall;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
-      z-index: 0; /* behind card */
+      z-index: 0;
     }
 
     .heart::before,
@@ -85,20 +86,37 @@
       border-radius: 50%;
     }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: 10px;
-      top: 0;
-    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
 
     @keyframes fall {
       0% { transform: translateY(-50px) rotate(0deg); opacity:1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
     }
+
+    /* Tiny heart burst */
+    .burst-heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: red;
+      transform: rotate(-45deg);
+      z-index: 2;
+    }
+
+    .burst-heart::before,
+    .burst-heart::after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .burst-heart::before { top: -7.5px; left: 0; }
+    .burst-heart::after { left: 7.5px; top: 0; }
+
   </style>
 </head>
 <body>
@@ -114,24 +132,25 @@
 
   <script>
     const noBtn = document.getElementById("no");
+    const card = document.getElementById("card");
 
     // NO button runs away
     function moveNoButton() {
-      const x = Math.random() * 200 - 100; // horizontal
-      const y = Math.random() * 50 - 25;   // vertical
+      const x = Math.random() * 250 - 125; // horizontal
+      const y = Math.random() * 100 - 50;  // vertical
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
-
     noBtn.addEventListener("mouseover", moveNoButton);
     noBtn.addEventListener("touchstart", moveNoButton);
 
     // YES button click
     function sayLove() {
-      document.getElementById("card").innerHTML = `
+      card.innerHTML = `
         <h1>😂 Surprise! ❤️</h1>
-        <p>No escape now! You’re officially my Valentine 😜</p>
+        <p>No escape now, Vibhath! You’re officially my Valentine 😜</p>
         <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Funny GIF">
       `;
+      createHeartBurst(30);
     }
 
     // Create falling hearts
@@ -139,17 +158,38 @@
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.style.left = Math.random() * window.innerWidth + 'px';
+      const size = 10 + Math.random() * 20;
+      heart.style.width = heart.style.height = size + 'px';
       heart.style.animationDuration = 3 + Math.random() * 5 + 's';
-      heart.style.width = heart.style.height = 15 + Math.random() * 15 + 'px'; // random size
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 8000); // remove after animation
+      setTimeout(() => { heart.remove(); }, 8000);
+    }
+    setInterval(createHeart, 250);
+
+    // Heart burst effect on YES
+    function createHeartBurst(count) {
+      for (let i = 0; i < count; i++) {
+        const burst = document.createElement('div');
+        burst.classList.add('burst-heart');
+        burst.style.left = (window.innerWidth/2 + Math.random()*100 -50) + 'px';
+        burst.style.top = (window.innerHeight/2 + Math.random()*50 -25) + 'px';
+        const size = 10 + Math.random()*10;
+        burst.style.width = burst.style.height = size + 'px';
+        document.body.appendChild(burst);
+
+        // Animate outward
+        const angle = Math.random()*2*Math.PI;
+        const distance = 50 + Math.random()*50;
+        burst.animate([
+          { transform: 'translate(0,0)', opacity: 1 },
+          { transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`, opacity: 0 }
+        ], { duration: 1000, easing: 'ease-out' });
+
+        setTimeout(()=>burst.remove(), 1000);
+      }
     }
 
-    setInterval(createHeart, 300); // continuously create hearts
   </script>
-
 </body>
 </html>
