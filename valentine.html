@@ -26,7 +26,7 @@
       width: 90%;
       text-align: center;
       position: relative;
-      z-index: 1; /* make sure card is above hearts */
+      z-index: 1; /* above hearts */
     }
 
     .buttons {
@@ -62,17 +62,37 @@
       margin-top: 20px;
     }
 
-    /* Falling hearts */
+    /* Red hearts */
     .heart {
       position: absolute;
       width: 20px;
       height: 20px;
-      background: url('https://i.postimg.cc/bN6FGc5q/heart.png') no-repeat center/cover;
-      pointer-events: none;
+      background: red;
+      transform: rotate(-45deg);
       animation-name: fall;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
-      z-index: 0; /* behind the card */
+      z-index: 0; /* behind card */
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 10px;
+      top: 0;
     }
 
     @keyframes fall {
@@ -97,8 +117,8 @@
 
     // NO button runs away
     function moveNoButton() {
-      const x = Math.random() * 200 - 100; // horizontal move
-      const y = Math.random() * 50 - 25;   // vertical move
+      const x = Math.random() * 200 - 100; // horizontal
+      const y = Math.random() * 50 - 25;   // vertical
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
@@ -120,6 +140,7 @@
       heart.classList.add('heart');
       heart.style.left = Math.random() * window.innerWidth + 'px';
       heart.style.animationDuration = 3 + Math.random() * 5 + 's';
+      heart.style.width = heart.style.height = 15 + Math.random() * 15 + 'px'; // random size
       document.body.appendChild(heart);
 
       setTimeout(() => {
@@ -127,7 +148,7 @@
       }, 8000); // remove after animation
     }
 
-    setInterval(createHeart, 300); // create hearts continuously
+    setInterval(createHeart, 300); // continuously create hearts
   </script>
 
 </body>
