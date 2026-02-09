@@ -10,7 +10,9 @@
       height: 100vh;
       margin: 0;
       color: white;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
       position: relative;
     }
@@ -21,8 +23,10 @@
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       max-width: 400px;
-      margin: 0 auto;
+      width: 90%;
+      text-align: center;
       position: relative;
+      z-index: 1; /* make sure card is above hearts */
     }
 
     .buttons {
@@ -58,16 +62,17 @@
       margin-top: 20px;
     }
 
-    /* Rose petals falling */
-    .petal {
+    /* Falling hearts */
+    .heart {
       position: absolute;
       width: 20px;
       height: 20px;
-      background: url('https://i.postimg.cc/4y1JY2Wx/rose.png') no-repeat center/cover;
+      background: url('https://i.postimg.cc/bN6FGc5q/heart.png') no-repeat center/cover;
       pointer-events: none;
       animation-name: fall;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
+      z-index: 0; /* behind the card */
     }
 
     @keyframes fall {
@@ -92,8 +97,8 @@
 
     // NO button runs away
     function moveNoButton() {
-      const x = Math.random() * 200 - 100; // left/right
-      const y = Math.random() * 50 - 25;   // slight vertical movement
+      const x = Math.random() * 200 - 100; // horizontal move
+      const y = Math.random() * 50 - 25;   // vertical move
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
@@ -109,20 +114,20 @@
       `;
     }
 
-    // Create falling rose petals
-    function createPetal() {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.style.left = Math.random() * window.innerWidth + 'px';
-      petal.style.animationDuration = 3 + Math.random() * 5 + 's';
-      document.body.appendChild(petal);
+    // Create falling hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = 3 + Math.random() * 5 + 's';
+      document.body.appendChild(heart);
 
       setTimeout(() => {
-        petal.remove();
+        heart.remove();
       }, 8000); // remove after animation
     }
 
-    setInterval(createPetal, 300); // create petals continuously
+    setInterval(createHeart, 300); // create hearts continuously
   </script>
 
 </body>
