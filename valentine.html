@@ -130,8 +130,8 @@
     </div>
   </div>
 
-  <!-- Audio element -->
-  <audio id="loveAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <!-- Romantic piano music -->
+  <audio id="loveAudio" src="romantic.mp3" preload="auto"></audio>
 
   <script>
     const noBtn = document.getElementById("no");
@@ -140,8 +140,8 @@
 
     // NO button runs away
     function moveNoButton() {
-      const x = Math.random() * 250 - 125; // horizontal
-      const y = Math.random() * 100 - 50;  // vertical
+      const x = Math.random() * 250 - 125;
+      const y = Math.random() * 100 - 50;
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
     noBtn.addEventListener("mouseover", moveNoButton);
@@ -155,9 +155,10 @@
         <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Funny GIF">
       `;
       createHeartBurst(30);
-      // Play romantic sound
+      // Play romantic music
       audio.currentTime = 0;
-      audio.play();
+      audio.play().catch(e => console.log("Audio blocked by browser", e));
+      audio.loop = true;
     }
 
     // Create falling hearts
@@ -169,12 +170,11 @@
       heart.style.width = heart.style.height = size + 'px';
       heart.style.animationDuration = 3 + Math.random() * 5 + 's';
       document.body.appendChild(heart);
-
-      setTimeout(() => { heart.remove(); }, 8000);
+      setTimeout(() => heart.remove(), 8000);
     }
     setInterval(createHeart, 250);
 
-    // Heart burst effect on YES
+    // Heart burst effect
     function createHeartBurst(count) {
       for (let i = 0; i < count; i++) {
         const burst = document.createElement('div');
@@ -185,7 +185,6 @@
         burst.style.width = burst.style.height = size + 'px';
         document.body.appendChild(burst);
 
-        // Animate outward
         const angle = Math.random()*2*Math.PI;
         const distance = 50 + Math.random()*50;
         burst.animate([
@@ -196,7 +195,6 @@
         setTimeout(()=>burst.remove(), 1000);
       }
     }
-
   </script>
 </body>
 </html>
