@@ -63,7 +63,7 @@
       margin-top: 20px;
     }
 
-    /* Hearts falling */
+    /* Falling hearts */
     .heart {
       position: absolute;
       width: 20px;
@@ -130,9 +130,13 @@
     </div>
   </div>
 
+  <!-- Audio element -->
+  <audio id="loveAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
   <script>
     const noBtn = document.getElementById("no");
     const card = document.getElementById("card");
+    const audio = document.getElementById("loveAudio");
 
     // NO button runs away
     function moveNoButton() {
@@ -151,6 +155,9 @@
         <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Funny GIF">
       `;
       createHeartBurst(30);
+      // Play romantic sound
+      audio.currentTime = 0;
+      audio.play();
     }
 
     // Create falling hearts
